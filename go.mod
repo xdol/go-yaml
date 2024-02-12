@@ -1,10 +1,10 @@
 module github.com/goccy/go-yaml
 
-go 1.19
+go 1.22
 
 require (
 	github.com/fatih/color v1.16.0
-	github.com/go-playground/validator/v10 v10.17.0
+	github.com/go-playground/validator/v10 v10.18.0
 	github.com/google/go-cmp v0.6.0
 	github.com/mattn/go-colorable v0.1.13
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028
