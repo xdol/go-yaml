@@ -255,13 +255,6 @@ func (n *BaseNode) SetComment(node *CommentGroupNode) error {
 	return nil
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func readNode(p []byte, node Node) (int, error) {
 	s := node.String()
 	readLen := node.readLen()
@@ -270,9 +263,9 @@ func readNode(p []byte, node Node) (int, error) {
 		node.clearLen()
 		return 0, io.EOF
 	}
-	size := min(remain, len(p))
+	size := int(math.Min(float64(remain), float64(len(p))))
 	for idx, b := range []byte(s[readLen : readLen+size]) {
-		p[idx] = byte(b)
+		p[idx] = b
 	}
 	node.addReadLen(size)
 	return size, nil
@@ -441,7 +434,7 @@ func Comment(tk *token.Token) *CommentNode {
 }
 
 func CommentGroup(comments []*token.Token) *CommentGroupNode {
-	nodes := []*CommentNode{}
+	var nodes []*CommentNode
 	for _, comment := range comments {
 		nodes = append(nodes, Comment(comment))
 	}
@@ -562,7 +555,7 @@ func (f *File) Read(p []byte) (int, error) {
 
 // String all documents to text
 func (f *File) String() string {
-	docs := []string{}
+	var docs []string
 	for _, doc := range f.Docs {
 		docs = append(docs, doc.String())
 	}
@@ -603,7 +596,7 @@ func (d *DocumentNode) AddColumn(col int) {
 
 // String document to text
 func (d *DocumentNode) String() string {
-	doc := []string{}
+	var doc []string
 	if d.Start != nil {
 		doc = append(doc, d.Start.Value)
 	}
@@ -831,7 +824,7 @@ func (n *StringNode) String() string {
 		// It works mostly, but inconsistencies occur if line break characters are mixed.
 		header := token.LiteralBlockHeader(n.Value)
 		space := strings.Repeat(" ", n.Token.Position.Column-1)
-		values := []string{}
+		var values []string
 		for _, v := range strings.Split(n.Value, lbc) {
 			values = append(values, fmt.Sprintf("%s  %s", space, v))
 		}
@@ -862,7 +855,7 @@ func (n *StringNode) stringWithoutComment() string {
 		// It works mostly, but inconsistencies occur if line break characters are mixed.
 		header := token.LiteralBlockHeader(n.Value)
 		space := strings.Repeat(" ", n.Token.Position.Column-1)
-		values := []string{}
+		var values []string
 		for _, v := range strings.Split(n.Value, lbc) {
 			values = append(values, fmt.Sprintf("%s  %s", space, v))
 		}
@@ -1214,7 +1207,7 @@ func (n *MappingNode) AddColumn(col int) {
 }
 
 func (n *MappingNode) flowStyleString(commentMode bool) string {
-	values := []string{}
+	var values []string
 	for _, value := range n.Values {
 		values = append(values, strings.TrimLeft(value.String(), " "))
 	}
@@ -1226,7 +1219,7 @@ func (n *MappingNode) flowStyleString(commentMode bool) string {
 }
 
 func (n *MappingNode) blockStyleString(commentMode bool) string {
-	values := []string{}
+	var values []string
 	for _, value := range n.Values {
 		values = append(values, value.String())
 	}
@@ -1547,7 +1540,7 @@ func (n *SequenceNode) AddColumn(col int) {
 }
 
 func (n *SequenceNode) flowStyleString() string {
-	values := []string{}
+	var values []string
 	for _, value := range n.Values {
 		values = append(values, value.String())
 	}
@@ -1556,7 +1549,7 @@ func (n *SequenceNode) flowStyleString() string {
 
 func (n *SequenceNode) blockStyleString() string {
 	space := strings.Repeat(" ", n.Start.Position.Column-1)
-	values := []string{}
+	var values []string
 	if n.Comment != nil {
 		values = append(values, n.Comment.StringWithSpace(n.Start.Position.Column-1))
 	}
@@ -1869,7 +1862,7 @@ func (n *CommentGroupNode) AddColumn(col int) {
 
 // String comment to text
 func (n *CommentGroupNode) String() string {
-	values := []string{}
+	var values []string
 	for _, comment := range n.Comments {
 		values = append(values, comment.String())
 	}
@@ -1877,7 +1870,7 @@ func (n *CommentGroupNode) String() string {
 }
 
 func (n *CommentGroupNode) StringWithSpace(col int) string {
-	values := []string{}
+	var values []string
 	space := strings.Repeat(" ", col)
 	for _, comment := range n.Comments {
 		values = append(values, space+comment.String())
@@ -2066,7 +2059,7 @@ func Filter(typ NodeType, node Node) []Node {
 
 // FilterFile returns a list of nodes that match the given type.
 func FilterFile(typ NodeType, file *File) []Node {
-	results := []Node{}
+	var results []Node
 	for _, doc := range file.Docs {
 		walker := &filterWalker{typ: typ}
 		Walk(walker, doc)
