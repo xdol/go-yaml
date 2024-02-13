@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
+	"git.xdol.org/xdol/go-yaml"
+	"git.xdol.org/xdol/go-yaml/lexer"
+	"git.xdol.org/xdol/go-yaml/printer"
 	"github.com/fatih/color"
-	"github.com/goccy/go-yaml"
-	"github.com/goccy/go-yaml/lexer"
-	"github.com/goccy/go-yaml/printer"
 	"github.com/mattn/go-colorable"
 )
 
