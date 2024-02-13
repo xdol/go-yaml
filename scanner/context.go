@@ -3,7 +3,7 @@ package scanner
 import (
 	"sync"
 
-	"github.com/goccy/go-yaml/token"
+	"git.xdol.org/xdol/go-yaml/token"
 )
 
 const whitespace = ' '

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/goccy/go-yaml/lexer"
-	"github.com/goccy/go-yaml/printer"
+	"git.xdol.org/xdol/go-yaml/lexer"
+	"git.xdol.org/xdol/go-yaml/printer"
 )
 
 func Test_Printer(t *testing.T) {

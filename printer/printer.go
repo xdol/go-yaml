@@ -5,9 +5,9 @@ import (
 	"math"
 	"strings"
 
+	"git.xdol.org/xdol/go-yaml/ast"
+	"git.xdol.org/xdol/go-yaml/token"
 	"github.com/fatih/color"
-	"github.com/goccy/go-yaml/ast"
-	"github.com/goccy/go-yaml/token"
 )
 
 // Property additional property set for each the token

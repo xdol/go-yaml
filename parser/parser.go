@@ -5,10 +5,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/goccy/go-yaml/ast"
-	"github.com/goccy/go-yaml/internal/errors"
-	"github.com/goccy/go-yaml/lexer"
-	"github.com/goccy/go-yaml/token"
+	"git.xdol.org/xdol/go-yaml/ast"
+	"git.xdol.org/xdol/go-yaml/internal/errors"
+	"git.xdol.org/xdol/go-yaml/lexer"
+	"git.xdol.org/xdol/go-yaml/token"
 	"golang.org/x/xerrors"
 )
 

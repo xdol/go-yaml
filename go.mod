@@ -1,4 +1,4 @@
-module github.com/goccy/go-yaml
+module git.xdol.org/xdol/go-yaml
 
 go 1.22
 

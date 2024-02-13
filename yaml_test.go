@@ -5,11 +5,10 @@ import (
 	"strings"
 	"testing"
 
+	"git.xdol.org/xdol/go-yaml"
+	"git.xdol.org/xdol/go-yaml/ast"
 	"github.com/google/go-cmp/cmp"
 	"golang.org/x/xerrors"
-
-	"github.com/goccy/go-yaml"
-	"github.com/goccy/go-yaml/ast"
 )
 
 func TestMarshal(t *testing.T) {
