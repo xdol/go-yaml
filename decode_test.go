@@ -3,7 +3,9 @@ package yaml_test
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
+	"git.xdol.org/xdol/go-yaml/internal/yerrors"
 	"io"
 	"log"
 	"math"
@@ -16,7 +18,6 @@ import (
 
 	"git.xdol.org/xdol/go-yaml"
 	"git.xdol.org/xdol/go-yaml/ast"
-	"git.xdol.org/xdol/go-yaml/internal/errors"
 	"git.xdol.org/xdol/go-yaml/parser"
 	"golang.org/x/xerrors"
 )
@@ -2024,7 +2025,7 @@ map: &map
 		var buf bytes.Buffer
 		var v bool
 		err := yaml.NewDecoder(&buf).DecodeFromNode(nil, v)
-		if !xerrors.Is(err, errors.ErrDecodeRequiredPointerType) {
+		if !errors.Is(err, yerrors.ErrDecodeRequiredPointerType) {
 			t.Fatalf("unexpected error: %s", err)
 		}
 	})
