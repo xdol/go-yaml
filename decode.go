@@ -574,7 +574,10 @@ func (d *Decoder) deleteStructKeys(structType reflect.Type, unknownFields map[st
 		}
 
 		if structField.IsInline {
-			d.deleteStructKeys(field.Type, unknownFields)
+			err := d.deleteStructKeys(field.Type, unknownFields)
+			if err != nil {
+				return err
+			}
 		} else {
 			delete(unknownFields, structField.RenderName)
 		}
@@ -1236,7 +1239,10 @@ func (d *Decoder) decodeStruct(ctx context.Context, dst reflect.Value, src ast.N
 				}
 				continue
 			}
-			d.setDefaultValueIfConflicted(newFieldValue, structFieldMap)
+			err = d.setDefaultValueIfConflicted(newFieldValue, structFieldMap)
+			if err != nil {
+				return err
+			}
 			fieldValue.Set(d.castToAssignableValue(newFieldValue, fieldValue.Type()))
 			continue
 		}

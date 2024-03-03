@@ -216,7 +216,10 @@ func FormatError(e error, colored, inclSource bool) string {
 	var pp yerrors.PrettyPrinter
 	if errors.As(e, &pp) {
 		var buf bytes.Buffer
-		pp.PrettyPrint(&yerrors.Sink{&buf}, colored, inclSource)
+		err := pp.PrettyPrint(&yerrors.Sink{&buf}, colored, inclSource)
+		if err != nil {
+			return ""
+		}
 		return buf.String()
 	}
 

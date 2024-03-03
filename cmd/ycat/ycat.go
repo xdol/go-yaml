@@ -71,7 +71,10 @@ func _main(args []string) error {
 		}
 	}
 	writer := colorable.NewColorableStdout()
-	writer.Write([]byte(p.PrintTokens(tokens) + "\n"))
+	_, err = writer.Write([]byte(p.PrintTokens(tokens) + "\n"))
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

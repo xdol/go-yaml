@@ -120,7 +120,10 @@ func (e *wrapError) FormatError(p xerrors.Printer) error {
 	}
 	e.chainStateAndVerb(err)
 	if fmtErr, ok := err.(xerrors.Formatter); ok {
-		fmtErr.FormatError(p)
+		err := fmtErr.FormatError(p)
+		if err != nil {
+			return err
+		}
 	} else {
 		p.Print(err)
 	}
@@ -161,7 +164,10 @@ func (e *wrapError) Format(state fmt.State, verb rune) {
 
 func (e *wrapError) Error() string {
 	var buf bytes.Buffer
-	e.PrettyPrint(&Sink{&buf}, defaultColorize, defaultIncludeSource)
+	err := e.PrettyPrint(&Sink{&buf}, defaultColorize, defaultIncludeSource)
+	if err != nil {
+		return ""
+	}
 	return buf.String()
 }
 
@@ -206,11 +212,17 @@ type PrettyPrinter interface {
 type Sink struct{ *bytes.Buffer }
 
 func (es *Sink) Print(args ...interface{}) {
-	fmt.Fprint(es.Buffer, args...)
+	_, err := fmt.Fprint(es.Buffer, args...)
+	if err != nil {
+		return
+	}
 }
 
 func (es *Sink) Printf(f string, args ...interface{}) {
-	fmt.Fprintf(es.Buffer, f, args...)
+	_, err := fmt.Fprintf(es.Buffer, f, args...)
+	if err != nil {
+		return
+	}
 }
 
 func (es *Sink) Detail() bool {
@@ -219,7 +231,10 @@ func (es *Sink) Detail() bool {
 
 func (e *syntaxError) Error() string {
 	var buf bytes.Buffer
-	e.PrettyPrint(&Sink{&buf}, defaultColorize, defaultIncludeSource)
+	err := e.PrettyPrint(&Sink{&buf}, defaultColorize, defaultIncludeSource)
+	if err != nil {
+		return ""
+	}
 	return buf.String()
 }
 

@@ -1342,9 +1342,15 @@ func (t *tMarshal) MarshalYAML() ([]byte, error) {
 	buf.WriteString("tags:\n")
 	for i, v := range *t {
 		if i == 0 {
-			fmt.Fprintf(&buf, "- %s\n", v)
+			_, err := fmt.Fprintf(&buf, "- %s\n", v)
+			if err != nil {
+				return nil, err
+			}
 		} else {
-			fmt.Fprintf(&buf, "  %s\n", v)
+			_, err := fmt.Fprintf(&buf, "  %s\n", v)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 	return buf.Bytes(), nil
