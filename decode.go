@@ -20,7 +20,6 @@ import (
 	"git.xdol.org/xdol/go-yaml/ast"
 	"git.xdol.org/xdol/go-yaml/parser"
 	"git.xdol.org/xdol/go-yaml/token"
-	"golang.org/x/xerrors"
 )
 
 // Decoder reads and decodes YAML values from an input stream.
@@ -408,7 +407,7 @@ func (d *Decoder) resolveAlias(node ast.Node) (ast.Node, error) {
 		aliasName := n.Value.GetToken().Value
 		node := d.anchorNodeMap[aliasName]
 		if node == nil {
-			return nil, xerrors.Errorf("cannot find anchor by alias name %s", aliasName)
+			return nil, fmt.Errorf("cannot find anchor by alias name %s", aliasName)
 		}
 		return d.resolveAlias(node)
 	}
@@ -430,7 +429,7 @@ func (d *Decoder) getMapNode(node ast.Node) (ast.MapNode, error) {
 		aliasName := alias.Value.GetToken().Value
 		node := d.anchorNodeMap[aliasName]
 		if node == nil {
-			return nil, xerrors.Errorf("cannot find anchor by alias name %s", aliasName)
+			return nil, fmt.Errorf("cannot find anchor by alias name %s", aliasName)
 		}
 		mapNode, ok := node.(ast.MapNode)
 		if ok {
@@ -461,7 +460,7 @@ func (d *Decoder) getArrayNode(node ast.Node) (ast.ArrayNode, error) {
 		aliasName := alias.Value.GetToken().Value
 		node := d.anchorNodeMap[aliasName]
 		if node == nil {
-			return nil, xerrors.Errorf("cannot find anchor by alias name %s", aliasName)
+			return nil, fmt.Errorf("cannot find anchor by alias name %s", aliasName)
 		}
 		arrayNode, ok := node.(ast.ArrayNode)
 		if ok {
@@ -800,7 +799,7 @@ func (d *Decoder) decodeByUnmarshaler(ctx context.Context, dst reflect.Value, sr
 		}
 	}
 
-	return xerrors.Errorf("does not implemented Unmarshaler")
+	return fmt.Errorf("does not implemented Unmarshaler")
 }
 
 var (
@@ -1198,7 +1197,7 @@ func (d *Decoder) decodeStruct(ctx context.Context, dst reflect.Value, src ast.N
 				continue
 			}
 			if !fieldValue.CanSet() {
-				return xerrors.Errorf("cannot set embedded type as unexported field %s.%s", field.PkgPath, field.Name)
+				return fmt.Errorf("cannot set embedded type as unexported field %s.%s", field.PkgPath, field.Name)
 			}
 			if fieldValue.Type().Kind() == reflect.Ptr && src.Type() == ast.NullType {
 				// set nil value to pointer
