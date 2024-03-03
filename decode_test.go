@@ -19,7 +19,6 @@ import (
 	"git.xdol.org/xdol/go-yaml"
 	"git.xdol.org/xdol/go-yaml/ast"
 	"git.xdol.org/xdol/go-yaml/parser"
-	"golang.org/x/xerrors"
 )
 
 type Child struct {
@@ -2574,7 +2573,7 @@ func (u *unmarshalList) UnmarshalYAML(b []byte) error {
  - h: i`
 	actual := "\n" + string(b)
 	if expected != actual {
-		return xerrors.Errorf("unexpected bytes: expected [%q] but got [%q]", expected, actual)
+		return fmt.Errorf("unexpected bytes: expected [%q] but got [%q]", expected, actual)
 	}
 	var v []map[string]unmarshalString
 	if err := yaml.Unmarshal(b, &v); err != nil {

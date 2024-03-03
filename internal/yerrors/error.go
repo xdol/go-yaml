@@ -17,14 +17,14 @@ const (
 )
 
 var (
-	ErrDecodeRequiredPointerType = xerrors.New("required pointer type value")
+	ErrDecodeRequiredPointerType = errors.New("required pointer type value")
 )
 
 // Wrapf wrap error for stack trace
 func Wrapf(err error, msg string, args ...interface{}) error {
 	return &wrapError{
 		baseError: &baseError{},
-		err:       xerrors.Errorf(msg, args...),
+		err:       fmt.Errorf(msg, args...),
 		nextErr:   err,
 		frame:     xerrors.Caller(1),
 	}

@@ -1,30 +1,30 @@
 package yaml
 
 import (
+    "fmt"
 	"errors"
 	"git.xdol.org/xdol/go-yaml/ast"
-	"golang.org/x/xerrors"
 )
 
 var (
-	ErrInvalidQuery               = xerrors.New("invalid query")
-	ErrInvalidPath                = xerrors.New("invalid path instance")
-	ErrInvalidPathString          = xerrors.New("invalid path string")
-	ErrNotFoundNode               = xerrors.New("node not found")
-	ErrUnknownCommentPositionType = xerrors.New("unknown comment position type")
-	ErrInvalidCommentMapValue     = xerrors.New("invalid comment map value. it must be not nil value")
+	ErrInvalidQuery               = errors.New("invalid query")
+	ErrInvalidPath                = errors.New("invalid path instance")
+	ErrInvalidPathString          = errors.New("invalid path string")
+	ErrNotFoundNode               = errors.New("node not found")
+	ErrUnknownCommentPositionType = errors.New("unknown comment position type")
+	ErrInvalidCommentMapValue     = errors.New("invalid comment map value. it must be not nil value")
 )
 
 func ErrUnsupportedHeadPositionType(node ast.Node) error {
-	return xerrors.Errorf("unsupported comment head position for %s", node.Type())
+	return fmt.Errorf("unsupported comment head position for %s", node.Type())
 }
 
 func ErrUnsupportedLinePositionType(node ast.Node) error {
-	return xerrors.Errorf("unsupported comment line position for %s", node.Type())
+	return fmt.Errorf("unsupported comment line position for %s", node.Type())
 }
 
 func ErrUnsupportedFootPositionType(node ast.Node) error {
-	return xerrors.Errorf("unsupported comment foot position for %s", node.Type())
+	return fmt.Errorf("unsupported comment foot position for %s", node.Type())
 }
 
 // IsInvalidQueryError whether err is ErrInvalidQuery or not.

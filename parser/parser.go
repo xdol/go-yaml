@@ -9,7 +9,6 @@ import (
 	"git.xdol.org/xdol/go-yaml/internal/yerrors"
 	"git.xdol.org/xdol/go-yaml/lexer"
 	"git.xdol.org/xdol/go-yaml/token"
-	"golang.org/x/xerrors"
 )
 
 type parser struct{}
@@ -292,7 +291,7 @@ func (p *parser) parseMappingValue(ctx *context) (ast.Node, error) {
 		case ast.MappingValueType:
 			node.Values = append(node.Values, value.(*ast.MappingValueNode))
 		default:
-			return nil, xerrors.Errorf("failed to parse mapping value node node is %s", value.Type())
+			return nil, fmt.Errorf("failed to parse mapping value node node is %s", value.Type())
 		}
 		ntk = ctx.nextNotCommentToken()
 		antk = ctx.afterNextNotCommentToken()

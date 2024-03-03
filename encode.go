@@ -17,7 +17,6 @@ import (
 	"git.xdol.org/xdol/go-yaml/parser"
 	"git.xdol.org/xdol/go-yaml/printer"
 	"git.xdol.org/xdol/go-yaml/token"
-	"golang.org/x/xerrors"
 )
 
 const (
@@ -423,7 +422,7 @@ func (e *Encoder) encodeByMarshaler(ctx context.Context, v reflect.Value, column
 		}
 	}
 
-	return nil, xerrors.Errorf("does not implemented Marshaler")
+	return nil, fmt.Errorf("does not implemented Marshaler")
 }
 
 func (e *Encoder) encodeValue(ctx context.Context, v reflect.Value, column int) (ast.Node, error) {
@@ -481,7 +480,7 @@ func (e *Encoder) encodeValue(ctx context.Context, v reflect.Value, column int) 
 	case reflect.Map:
 		return e.encodeMap(ctx, v, column), nil
 	default:
-		return nil, xerrors.Errorf("unknown value type %s", v.Type().String())
+		return nil, fmt.Errorf("unknown value type %s", v.Type().String())
 	}
 }
 
@@ -785,14 +784,14 @@ func (e *Encoder) encodeStruct(ctx context.Context, value reflect.Value, column 
 			value = anchorNode
 		case structField.IsAutoAlias:
 			if fieldValue.Kind() != reflect.Ptr {
-				return nil, xerrors.Errorf(
+				return nil, fmt.Errorf(
 					"%s in struct is not pointer type. but required automatically alias detection",
 					structField.FieldName,
 				)
 			}
 			anchorName := e.anchorPtrToNameMap[fieldValue.Pointer()]
 			if anchorName == "" {
-				return nil, xerrors.Errorf(
+				return nil, fmt.Errorf(
 					"cannot find anchor name from pointer address for automatically alias detection",
 				)
 			}
@@ -827,7 +826,7 @@ func (e *Encoder) encodeStruct(ctx context.Context, value reflect.Value, column 
 				if _, ok := value.(*ast.NullNode); ok {
 					continue
 				}
-				return nil, xerrors.Errorf("inline value is must be map or struct type")
+				return nil, fmt.Errorf("inline value is must be map or struct type")
 			}
 			mapIter := mapNode.MapRange()
 			for mapIter.Next() {

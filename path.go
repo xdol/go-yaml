@@ -188,7 +188,7 @@ func parsePathIndex(b *PathBuilder, buf []rune, cursor int) (*PathBuilder, []run
 		}
 		return b.Index(uint(num)), buf, cursor + 1, nil
 	}
-	return nil, nil, 0, yerrors.Wrapf(ErrInvalidPathString, "invalid character %s at %d", c, cursor)
+	return nil, nil, 0, yerrors.Wrapf(ErrInvalidPathString, "invalid character %c at %d", c, cursor)
 }
 
 // Path represent YAMLPath ( like a JSONPath ).
