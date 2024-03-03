@@ -174,7 +174,10 @@ func (p *parser) createMapValueNode(ctx *context, key ast.MapKeyNode, colonToken
 		nullNode := ast.Null(nullToken)
 
 		if comment != nil {
-			nullNode.SetComment(comment)
+			err := nullNode.SetComment(comment)
+			if err != nil {
+				return nil, err
+			}
 		} else {
 			// If there is a comment, it is already bound to the key node,
 			// so remove the comment from the key to bind it to the null value.
@@ -183,7 +186,10 @@ func (p *parser) createMapValueNode(ctx *context, key ast.MapKeyNode, colonToken
 				if err := key.SetComment(nil); err != nil {
 					return nil, err
 				}
-				nullNode.SetComment(keyComment)
+				err := nullNode.SetComment(keyComment)
+				if err != nil {
+					return nil, err
+				}
 			}
 		}
 		return nullNode, nil
@@ -198,7 +204,10 @@ func (p *parser) createMapValueNode(ctx *context, key ast.MapKeyNode, colonToken
 		ctx.insertToken(ctx.idx, nullToken)
 		nullNode := ast.Null(nullToken)
 		if comment != nil {
-			nullNode.SetComment(comment)
+			err := nullNode.SetComment(comment)
+			if err != nil {
+				return nil, err
+			}
 		}
 		return nullNode, nil
 	}
@@ -208,7 +217,10 @@ func (p *parser) createMapValueNode(ctx *context, key ast.MapKeyNode, colonToken
 		return nil, yerrors.Wrapf(err, "failed to parse mapping 'value' node")
 	}
 	if comment != nil {
-		value.SetComment(comment)
+		err := value.SetComment(comment)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return value, nil
 }
