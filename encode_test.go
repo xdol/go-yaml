@@ -657,12 +657,12 @@ func TestEncoder(t *testing.T) {
 		// time value
 		{
 			"v: 0001-01-01T00:00:00Z\n",
-			map[string]time.Time{"v": time.Time{}},
+			map[string]time.Time{"v": {}},
 			nil,
 		},
 		{
 			"v: 0001-01-01T00:00:00Z\n",
-			map[string]*time.Time{"v": &time.Time{}},
+			map[string]*time.Time{"v": {}},
 			nil,
 		},
 		{
@@ -731,7 +731,7 @@ func TestEncodeDefinedTypeKeyMap(t *testing.T) {
 		M map[K]string
 	}
 	bytes, err := yaml.Marshal(U{
-		M: map[K]string{K("x"): "y"},
+		M: map[K]string{"x": "y"},
 	})
 	if err != nil {
 		t.Fatalf("%+v", err)
@@ -1052,7 +1052,7 @@ func TestEncoder_FlowRecursive(t *testing.T) {
 		M map[string][]int `yaml:",flow"`
 	}
 	v.M = map[string][]int{
-		"test": []int{1, 2, 3},
+		"test": {1, 2, 3},
 	}
 	var buf bytes.Buffer
 	if err := yaml.NewEncoder(&buf).Encode(v); err != nil {

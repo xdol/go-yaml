@@ -131,7 +131,7 @@ func (e *Encoder) setCommentByCommentMap(node ast.Node) error {
 			continue
 		}
 		for _, comment := range comments {
-			commentTokens := []*token.Token{}
+			var commentTokens []*token.Token
 			for _, text := range comment.Texts {
 				commentTokens = append(commentTokens, token.New(text, text, nil))
 			}

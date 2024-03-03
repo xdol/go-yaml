@@ -1248,11 +1248,10 @@ func (n *MappingNode) String() string {
 		return "{}"
 	}
 
-	commentMode := true
 	if n.IsFlowStyle || len(n.Values) == 0 {
-		return n.flowStyleString(commentMode)
+		return n.flowStyleString(true)
 	}
-	return n.blockStyleString(commentMode)
+	return n.blockStyleString(true)
 }
 
 // MapRange implements MapNode protocol

@@ -955,7 +955,7 @@ q#.r: hogehoge # commentQR
 	for _, doc := range f.Docs {
 		ast.Walk(&capturer, doc.Body)
 	}
-	commentPaths := []string{}
+	var commentPaths []string
 	for i := 0; i < capturer.capturedNum; i++ {
 		if capturer.orderedTypes[i] == ast.CommentType {
 			commentPaths = append(commentPaths, capturer.orderedPaths[i])

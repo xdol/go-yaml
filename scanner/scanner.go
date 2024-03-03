@@ -1,8 +1,8 @@
 package scanner
 
 import (
+	"errors"
 	"io"
-    "errors"
 	"strings"
 
 	"git.xdol.org/xdol/go-yaml/token"
@@ -140,7 +140,7 @@ func (s *Scanner) newLineCount(src []rune) int {
 	return cnt
 }
 
-func (s *Scanner) updateIndentState(ctx *Context) {
+func (s *Scanner) updateIndentState() {
 	indentNumBasedIndentState := s.indentState
 	if s.prevIndentNum < s.indentNum {
 		s.indentLevel = s.prevIndentLevel + 1
@@ -191,7 +191,7 @@ func (s *Scanner) updateIndent(ctx *Context, c rune) {
 		s.indentState = IndentStateKeep
 		return
 	}
-	s.updateIndentState(ctx)
+	s.updateIndentState()
 	s.isFirstCharAtLine = false
 	if s.isNeededKeepPreviousIndentNum(ctx, c) {
 		return
@@ -230,7 +230,7 @@ func (s *Scanner) scanSingleQuote(ctx *Context) (tk *token.Token, pos int) {
 	startIndex := ctx.idx + 1
 	src := ctx.src
 	size := len(src)
-	value := []rune{}
+	var value []rune
 	isFirstLineChar := false
 	isNewLine := false
 	for idx := startIndex; idx < size; idx++ {
@@ -294,7 +294,7 @@ func (s *Scanner) scanDoubleQuote(ctx *Context) (tk *token.Token, pos int) {
 	startIndex := ctx.idx + 1
 	src := ctx.src
 	size := len(src)
-	value := []rune{}
+	var value []rune
 	isFirstLineChar := false
 	isNewLine := false
 	for idx := startIndex; idx < size; idx++ {
@@ -568,7 +568,7 @@ func (s *Scanner) scanLiteralHeader(ctx *Context) (pos int, err error) {
 						s.column += len(litBuf)
 						s.offset += len(litBuf)
 						commentHeader := strings.Index(value, "#")
-						ctx.addToken(token.Comment(string(value[commentHeader+1:]), string(commentBuf), s.pos()))
+						ctx.addToken(token.Comment(value[commentHeader+1:], string(commentBuf), s.pos()))
 					} else {
 						ctx.addToken(token.Literal("|"+opt, string(ctx.obuf), s.pos()))
 					}
@@ -583,7 +583,7 @@ func (s *Scanner) scanLiteralHeader(ctx *Context) (pos int, err error) {
 						s.column += len(foldedBuf)
 						s.offset += len(foldedBuf)
 						commentHeader := strings.Index(value, "#")
-						ctx.addToken(token.Comment(string(value[commentHeader+1:]), string(commentBuf), s.pos()))
+						ctx.addToken(token.Comment(value[commentHeader+1:], string(commentBuf), s.pos()))
 					} else {
 						ctx.addToken(token.Folded(">"+opt, string(ctx.obuf), s.pos()))
 					}
