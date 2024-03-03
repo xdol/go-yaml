@@ -97,7 +97,7 @@ func (p *Printer) PrintTokens(tokens token.Tokens) string {
 			p.LineNumberFormat = defaultLineNumberFormat
 		}
 	}
-	texts := []string{}
+	var texts []string
 	lineNumber := tokens[0].Position.Line
 	for _, tk := range tokens {
 		lines := strings.Split(tk.Origin, "\n")

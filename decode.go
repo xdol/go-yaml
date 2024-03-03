@@ -171,7 +171,7 @@ func (d *Decoder) addHeadOrLineCommentToMap(node ast.Node) {
 	if commentGroup == nil {
 		return
 	}
-	texts := []string{}
+	var texts []string
 	targetLine := node.GetToken().Position.Line
 	minCommentLine := math.MaxInt
 	for _, comment := range commentGroup.Comments {
@@ -221,7 +221,7 @@ func (d *Decoder) addSequenceNodeCommentToMap(node *ast.SequenceNode) {
 func (d *Decoder) addFootCommentToMap(node ast.Node) {
 	var (
 		footComment     *ast.CommentGroupNode
-		footCommentPath string = node.GetPath()
+		footCommentPath = node.GetPath()
 	)
 	switch n := node.(type) {
 	case *ast.SequenceNode:
@@ -761,11 +761,11 @@ func (d *Decoder) decodeByUnmarshaler(ctx context.Context, dst reflect.Value, sr
 	}
 
 	if _, ok := iface.(*time.Time); ok {
-		return d.decodeTime(ctx, dst, src)
+		return d.decodeTime(dst, src)
 	}
 
 	if _, ok := iface.(*time.Duration); ok {
-		return d.decodeDuration(ctx, dst, src)
+		return d.decodeDuration(dst, src)
 	}
 
 	if unmarshaler, isText := iface.(encoding.TextUnmarshaler); isText {
@@ -1086,7 +1086,7 @@ func (d *Decoder) castToTime(src ast.Node) (time.Time, error) {
 	return time.Time{}, nil
 }
 
-func (d *Decoder) decodeTime(ctx context.Context, dst reflect.Value, src ast.Node) error {
+func (d *Decoder) decodeTime(dst reflect.Value, src ast.Node) error {
 	t, err := d.castToTime(src)
 	if err != nil {
 		return yerrors.Wrapf(err, "failed to convert to time")
@@ -1114,7 +1114,7 @@ func (d *Decoder) castToDuration(src ast.Node) (time.Duration, error) {
 	return t, nil
 }
 
-func (d *Decoder) decodeDuration(ctx context.Context, dst reflect.Value, src ast.Node) error {
+func (d *Decoder) decodeDuration(dst reflect.Value, src ast.Node) error {
 	t, err := d.castToDuration(src)
 	if err != nil {
 		return yerrors.Wrapf(err, "failed to convert to duration")
@@ -1559,7 +1559,7 @@ func (d *Decoder) readersUnderDir(dir string) ([]io.Reader, error) {
 	if err != nil {
 		return nil, yerrors.Wrapf(err, "failed to get files by %s", pattern)
 	}
-	readers := []io.Reader{}
+	var readers []io.Reader
 	for _, match := range matches {
 		if !d.isYAMLFile(match) {
 			continue
@@ -1574,7 +1574,7 @@ func (d *Decoder) readersUnderDir(dir string) ([]io.Reader, error) {
 }
 
 func (d *Decoder) readersUnderDirRecursive(dir string) ([]io.Reader, error) {
-	readers := []io.Reader{}
+	var readers []io.Reader
 	if err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if !d.isYAMLFile(path) {
 			return nil

@@ -351,7 +351,7 @@ func (p *Path) ReplaceWithNode(dst *ast.File, node ast.Node) error {
 
 // AnnotateSource add annotation to passed source ( see section 5.1 in README.md ).
 func (p *Path) AnnotateSource(source []byte, colored bool) ([]byte, error) {
-	file, err := parser.ParseBytes([]byte(source), 0)
+	file, err := parser.ParseBytes(source, 0)
 	if err != nil {
 		return nil, err
 	}

@@ -575,11 +575,11 @@ func TestDecoder(t *testing.T) {
 		},
 		{
 			"v: [A,B,C,]",
-			map[string][]string{"v": []string{"A", "B", "C"}},
+			map[string][]string{"v": {"A", "B", "C"}},
 		},
 		{
 			"v: [A,1,C]",
-			map[string][]string{"v": []string{"A", "1", "C"}},
+			map[string][]string{"v": {"A", "1", "C"}},
 		},
 		{
 			"v: [A,1,C]",
@@ -593,11 +593,11 @@ func TestDecoder(t *testing.T) {
 		},
 		{
 			"v:\n - A\n - B\n - C",
-			map[string][]string{"v": []string{"A", "B", "C"}},
+			map[string][]string{"v": {"A", "B", "C"}},
 		},
 		{
 			"v:\n - A\n - 1\n - C",
-			map[string][]string{"v": []string{"A", "1", "C"}},
+			map[string][]string{"v": {"A", "1", "C"}},
 		},
 		{
 			"v:\n - A\n - 1\n - C",
@@ -2100,7 +2100,7 @@ func (v *unmarshalableYAMLStringValue) UnmarshalYAML(b []byte) error {
 type unmarshalableTextStringValue string
 
 func (v *unmarshalableTextStringValue) UnmarshalText(b []byte) error {
-	*v = unmarshalableTextStringValue(string(b))
+	*v = unmarshalableTextStringValue(b)
 	return nil
 }
 
@@ -2409,8 +2409,8 @@ j: k
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
-	if string(yml) != "\n"+string(bytes) {
-		t.Fatalf("expected:[%s] actual:[%s]", string(yml), "\n"+string(bytes))
+	if yml != "\n"+string(bytes) {
+		t.Fatalf("expected:[%s] actual:[%s]", yml, "\n"+string(bytes))
 	}
 }
 
@@ -2427,7 +2427,7 @@ i: j
 k: l
 `
 	dec := yaml.NewDecoder(strings.NewReader(yml))
-	values := []map[string]string{}
+	var values []map[string]string
 	for {
 		var v map[string]string
 		if err := dec.Decode(&v); err != nil {
@@ -2470,7 +2470,7 @@ func (v *unmarshalYAMLWithAliasMap) UnmarshalYAML(b []byte) error {
 	if err := yaml.Unmarshal(b, &m); err != nil {
 		return err
 	}
-	*v = unmarshalYAMLWithAliasMap(m)
+	*v = m
 	return nil
 }
 
@@ -2554,7 +2554,7 @@ map:
 type unmarshalString string
 
 func (u *unmarshalString) UnmarshalYAML(b []byte) error {
-	*u = unmarshalString(string(b))
+	*u = unmarshalString(b)
 	return nil
 }
 
@@ -2617,22 +2617,22 @@ func TestDecoder_LiteralWithNewLine(t *testing.T) {
 		LastNode string `yaml:"last"`
 	}
 	tests := []A{
-		A{
+		{
 			Node: "hello\nworld",
 		},
-		A{
+		{
 			Node: "hello\nworld\n",
 		},
-		A{
+		{
 			Node: "hello\nworld\n\n",
 		},
-		A{
+		{
 			LastNode: "hello\nworld",
 		},
-		A{
+		{
 			LastNode: "hello\nworld\n",
 		},
-		A{
+		{
 			LastNode: "hello\nworld\n\n",
 		},
 	}

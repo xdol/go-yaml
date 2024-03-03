@@ -170,7 +170,7 @@ func (c *context) progress(num int) {
 }
 
 func newContext(tokens token.Tokens, mode Mode) *context {
-	filteredTokens := []*token.Token{}
+	var filteredTokens []*token.Token
 	if mode&ParseComments != 0 {
 		filteredTokens = tokens
 	} else {
@@ -186,7 +186,7 @@ func newContext(tokens token.Tokens, mode Mode) *context {
 	return &context{
 		idx:    0,
 		size:   len(filteredTokens),
-		tokens: token.Tokens(filteredTokens),
+		tokens: filteredTokens,
 		path:   "$",
 	}
 }

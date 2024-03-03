@@ -563,7 +563,7 @@ func (p *parser) parseDocument(ctx *context) (*ast.DocumentNode, error) {
 }
 
 func (p *parser) parseCommentOnly(ctx *context) *ast.CommentGroupNode {
-	commentTokens := []*token.Token{}
+	var commentTokens []*token.Token
 	for {
 		tk := ctx.currentToken()
 		if tk == nil {
@@ -579,7 +579,7 @@ func (p *parser) parseCommentOnly(ctx *context) *ast.CommentGroupNode {
 }
 
 func (p *parser) parseFootComment(ctx *context, col int) *ast.CommentGroupNode {
-	commentTokens := []*token.Token{}
+	var commentTokens []*token.Token
 	for {
 		ctx.progressIgnoreComment(1)
 		commentTokens = append(commentTokens, ctx.currentToken())

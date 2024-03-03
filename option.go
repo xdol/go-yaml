@@ -199,7 +199,7 @@ func CustomMarshaler[T any](marshaler func(T) ([]byte, error)) EncodeOption {
 type CommentPosition int
 
 const (
-	CommentHeadPosition CommentPosition = CommentPosition(iota)
+	CommentHeadPosition = CommentPosition(iota)
 	CommentLinePosition
 	CommentFootPosition
 )
